@@ -1,0 +1,6 @@
+[package]
+name = "physics-experiments"
+version = "0.1.0"
+authors = ["ischeinkman <scheinkman.ilan@gmail.com>"]
+
+[dependencies]
