@@ -1,69 +1,57 @@
 use std::string::ToString;
 
-extern crate num;
-use self::num::NumCast;
-use self::num::cast::cast;
-
-
-pub fn vplus<T : NumCast + Clone, K : NumCast + Clone>(a : &Vec<T>, b : &Vec<K>) -> Vec<f64>{
+pub fn vplus(a : &Vec<f64>, b : &Vec<f64>) -> Vec<f64>{
 	a.iter().zip(b.iter())
-		.map(|(a, b)| cast::<T, f64>(a.clone()).unwrap() + cast::<K, f64>(b.clone()).unwrap())
+		.map(|(a, b)| a + b) 
 		.collect()
 }
 
 
-pub fn vminus<T : NumCast + Clone, K : NumCast + Clone>(a : &Vec<T>, b : &Vec<K>) -> Vec<f64>{
+pub fn vminus( a : &Vec<f64>, b : &Vec<f64>) -> Vec<f64>{
 	a.iter().zip(b.iter())
-		.map(|(a, b)| cast::<T, f64>(a.clone()).unwrap() - cast::<K, f64>(b.clone()).unwrap())
+		.map(|(a,b)| a-b)
 		.collect()
 }
 
-pub fn vplusi<T : NumCast + Clone, K : NumCast + Clone>(a : &Vec<T>, b : &Vec<K>) -> Vec<i64>{
-	a.iter().zip(b.iter())
-		.map(|(a, b)| cast::<T, i64>(a.clone()).unwrap() + cast::<K, i64>(b.clone()).unwrap())
-		.collect()
-}
-
-
-pub fn vminusi<T : NumCast + Clone, K : NumCast + Clone>(a : &Vec<T>, b : &Vec<K>) -> Vec<i64>{
-	a.iter().zip(b.iter())
-		.map(|(a, b)| cast::<T, i64>(a.clone()).unwrap() - cast::<K, i64>(b.clone()).unwrap())
-		.collect()
-}
-
-pub fn scmultvi<T: NumCast + Clone, K: NumCast + Clone>(k : &K, v : &Vec<T>) -> Vec<i64> {
-	let ck : i64 = cast(k.clone()).unwrap();
+pub fn scmultv(k : &f64, v : &Vec<f64>) -> Vec<f64> {
 	v.iter()
-		.map(|a| cast::<T, i64>(a.clone()).unwrap())
-		.map(|ca| ca * ck)
+		.map(|a| a * k)
 		.collect()
 }
 
-pub fn scmultv<T: NumCast + Clone, K: NumCast + Clone>(k : &K, v : &Vec<T>) -> Vec<f64> {
-	let ck : f64 = cast(k.clone()).unwrap();
+pub fn vplusi(a : &Vec<i64>, b : &Vec<i64>) -> Vec<i64>{
+	a.iter().zip(b.iter())
+		.map(|(a, b)| a+b) 
+		.collect()
+}
+
+pub fn vminusi(a : &Vec<i64>, b : &Vec<i64>) -> Vec<i64>{
+	a.iter().zip(b.iter())
+		.map(|(a, b)| a-b) 
+		.collect()
+}
+
+pub fn scmultvi(k : &i64, v : &Vec<i64>) -> Vec<i64> {
 	v.iter()
-		.map(|a| cast::<T, f64>(a.clone()).unwrap())
-		.map(|ca| ca * ck)
+		.map(|a| a * k)
 		.collect()
 }
 
 
-
-pub fn mag<T : NumCast + Clone>(v : &Vec<T>) -> f64 {
+pub fn mag(v : &Vec<f64>) -> f64 {
 	let sm : f64 = v.iter()
-		.map(|a| cast::<T, f64>(a.clone()).unwrap())
-		.map(|af| af.powi(2))
+		.map(|a| a.powi(2))
 		.sum();
 	sm.sqrt()
 }
 
-pub fn norm<T : NumCast + Clone>(v : &Vec<T>) -> Vec<f64> {
+pub fn norm(v : &Vec<f64>) -> Vec<f64> {
 	scmultv(&(1.0/mag(v)), &v)
 }
 
-pub fn dot<T : NumCast + Clone, K : NumCast + Clone>(a : &Vec<T>, b : &Vec<K>) -> f64 {
+pub fn dot(a : &Vec<f64>, b : &Vec<f64>) -> f64 {
 	a.iter().zip(b.iter())
-		.map(|(a, b)| cast::<T, f64>(a.clone()).unwrap() * cast::<K, f64>(b.clone()).unwrap())
+		.map(|(a, b)| a*b) 
 		.sum()
 }
 

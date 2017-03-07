@@ -11,12 +11,12 @@ extern crate rand;
 use rand::Rng;
 use rand::distributions::{Range, IndependentSample};
 
-const me : f64 = 5.972e24;
-const re : f64 = 6.371e6;
+const ME : f64 = 5.972e24;
+const RE : f64 = 6.371e6;
 
 fn main() {
-	let stepsize = 0.0010;
-	let mut objs = vec![Particle::at_rest("earth", me, vec![0.0,0.0,0.0])];
+	let stepsize = 1.0;
+	let mut objs = vec![Particle::at_rest("earth", ME, vec![0.0,0.0,0.0])];
 	let range = Range::new(0.5, 1.0e7);
 	let mut rng = rand::thread_rng();
 	
@@ -26,8 +26,8 @@ fn main() {
 		objs.push( 
 			Particle::at_rest(
 				&numname.clone(),
-				range.ind_sample(&mut rng) * me, 
-				scmultv(&(1.0/re), &vec![range.ind_sample(&mut rng), range.ind_sample(&mut rng), range.ind_sample(&mut rng)])
+				range.ind_sample(&mut rng) * ME, 
+				scmultv(&(1.0/RE), &vec![range.ind_sample(&mut rng), range.ind_sample(&mut rng), range.ind_sample(&mut rng)])
 			)
 		);
 	}
@@ -36,8 +36,9 @@ fn main() {
 	loop {
 		t += stepsize;
 		gravsimstep(&mut objs, stepsize, false);
-		if(true || t % 1.0 <= stepsize) {
-			println!("{}: {:?}",t, scmultv(&re,&center_of_mass(&objs)));
+		
+		if( t % 10.0 < stepsize) {
+			println!("{}: {:?}",t, scmultv(&(1.0/RE),&center_of_mass(&objs)));
 		}
 	}
 }
