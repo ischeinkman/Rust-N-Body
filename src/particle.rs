@@ -36,7 +36,7 @@ impl <'a> Particle<'a> {
 		self.acc = scmultv(&0.0, &self.acc);
 	}
 	
-	pub fn kinrgy(&self) -> f64 {
+	pub fn ke(&self) -> f64 {
 		let v = mag(&self.vel);
 		0.5*self.mass*v*v
 	}

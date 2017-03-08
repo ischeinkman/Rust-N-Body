@@ -5,3 +5,4 @@ authors = ["ischeinkman <scheinkman.ilan@gmail.com>"]
 
 [dependencies]
 rand = "0.3.15"
+gnuplot = "0.0.22"
