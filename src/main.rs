@@ -55,7 +55,7 @@ fn main() {
 	println!("{}", 10.0*9.8*10.0);
 	loop {
 		if t > 1.428{
-			println!("{}", 0.5*objs[1].mass*mag(&objs[1].vel).powi(2));
+			println!("{}", 0.5*objs[1].mass*objs[1].vel.mag().powi(2));
 			break;
 		}
 		t += STEPSIZE;
@@ -63,7 +63,7 @@ fn main() {
 		if t % PRINTSIZE < STEPSIZE {
 			t_hist.push(t);
 			
-			let gpe : f64 = -1.0 * G * objs[0].mass * objs[1].mass *1.0/mag(&vminus(&objs[0].pos, &objs[1].pos));
+			let gpe : f64 = -1.0 * G * objs[0].mass * objs[1].mass *1.0/ objs[0].pos.minus(&objs[1].pos).mag();
 			gpe_hist.push(objs[1].mass * 9.82 * (objs[1].pos[0] - RE));
 			gravgraph.clear_axes();
 			gravgraph.axes2d()
@@ -72,7 +72,7 @@ fn main() {
 				.lines(t_hist.iter(), gpe_hist.iter(), &[]);
 			gravgraph.show();
 
-			let ke = 0.5 * objs[1].mass * mag(&objs[1].vel).powi(2);
+			let ke = 0.5 * objs[1].mass * objs[1].vel.mag().powi(2);
 			ke_hist.push(ke);
 			kegraph.clear_axes();
 			kegraph.axes2d()

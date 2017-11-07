@@ -11,7 +11,7 @@ pub struct Gravity {}
 
 impl Gravity {
     pub fn gravpe(a : &Particle, b : &Particle) -> f64 {
-        G*-1.0*a.mass*b.mass/mag(&vminus(&a.pos, &b.pos))
+        G*-1.0*a.mass*b.mass/(a.pos.minus(&b.pos).mag())
     }
 }
 

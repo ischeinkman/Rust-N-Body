@@ -15,29 +15,29 @@ pub fn center_of_mass(objs : &Vec<Particle>) -> Vec<f64> {
 	let mut mass = 0.0;
 	let mut weightpos = vec![0.0; objs[0].pos.len()];
 	for obj in objs {
-		weightpos = vplus(&weightpos, &scmultv(&obj.mass, &obj.pos));
+		weightpos = weightpos.plus(&obj.pos.scale(&obj.mass));
 		mass += obj.mass;
 	}
-	scmultv(&(1.0/mass), &weightpos)
+	weightpos.scale(&(1.0/mass))
 }
 
 impl Particle {
 	pub fn apply_force(&mut self, f : &Vec<f64>) {
-		self.acc = vplus(&self.acc, &scmultv(&(1.0/self.mass), &f));
+		self.acc = self.acc.plus(&f.scale(&(1.0/self.mass)));
 	}
 	
 	pub fn prog(&mut self, t : &f64) {
-		let posdiff = vplus(&scmultv(t, &self.vel), &scmultv(&(0.5*t*t), &self.acc));
-		self.pos = vplus(&self.pos, &posdiff);
-		let veldiff = scmultv(t, &self.acc);
-		self.vel = vplus(&self.vel, &veldiff);
+		let posdiff = self.vel.scale(t).plus(&self.acc.scale(&(0.5 *t*t)));
+		self.pos = self.pos.plus(&posdiff);
+		let veldiff = self.acc.scale(&t);
+		self.vel = self.vel.plus(&veldiff);
 		
 		//Zero out the acceleration; we recalculate them each step.
-		self.acc = scmultv(&0.0, &self.acc);
+		self.acc = self.acc.scale(&0.0);
 	}
 	
 	pub fn ke(&self) -> f64 {
-		let v = mag(&self.vel);
+		let v = self.vel.mag();
 		0.5*self.mass*v*v
 	}
 	
