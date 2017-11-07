@@ -1,15 +1,14 @@
 
 use math::*; 
 use std::fmt::{Display, Formatter, Result};
-use std::borrow::Cow;
 
-pub struct Particle<'a> {
+pub struct Particle {
 	pub pos : Vec<f64>,
 	pub vel : Vec<f64>,
 	pub acc : Vec<f64>,
 	pub mass : f64,
 	pub charge : f64,
-	pub name : Cow<'a, str>,
+	pub name : String
 }
 
 pub fn center_of_mass(objs : &Vec<Particle>) -> Vec<f64> {
@@ -22,7 +21,7 @@ pub fn center_of_mass(objs : &Vec<Particle>) -> Vec<f64> {
 	scmultv(&(1.0/mass), &weightpos)
 }
 
-impl <'a> Particle<'a> {
+impl Particle {
 	pub fn apply_force(&mut self, f : &Vec<f64>) {
 		self.acc = vplus(&self.acc, &scmultv(&(1.0/self.mass), &f));
 	}
@@ -42,22 +41,22 @@ impl <'a> Particle<'a> {
 		0.5*self.mass*v*v
 	}
 	
-	pub fn at_rest(name : &str, mass : f64, pos : Vec<f64>) -> Particle<'a> {
+	pub fn at_rest(name : &str, mass : f64, pos : Vec<f64>) -> Particle {
 		
 		let vel = vec![0.0,0.0,0.0];
 		let acc = vec![0.0,0.0,0.0];
 		Particle {
-			name : Cow::Owned(name.to_string()),
+			name : name.to_owned(),
 			mass,
 			pos,
 			vel,
 			acc,
-			charge : 0
+			charge : 0.0
 		}
 	}	
 }
 
-impl <'a> Display for Particle<'a> {
+impl Display for Particle {
 	fn fmt(&self, f: &mut Formatter) -> Result {
 		write!(f, "Particle {}:\n Pos: {},\n Vel: {},\n Acc: {},\n Mass: {}\n\n", self.name, vprint(&self.pos), vprint(&self.vel), vprint(&self.acc), self.mass)	
 	}
