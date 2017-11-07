@@ -7,6 +7,10 @@ use particle::*;
 mod gravity;
 use gravity::*;
 
+mod inv_square;
+use inv_square::*;
+
+
 extern crate rand;
 use rand::Rng;
 use rand::distributions::{Range, IndependentSample};
@@ -16,8 +20,8 @@ use gnuplot::*;
 
 const ME : f64 = 5.972e24;
 const RE : f64 = 6.371e6;
-const stepsize : f64 = 0.000001;
-const printsize : f64 = 100.0 * stepsize;
+const STEPSIZE: f64 = 0.000001;
+const PRINTSIZE: f64 = 100.0 * STEPSIZE;
 
 fn main() {
 	
@@ -46,7 +50,7 @@ fn main() {
 	let mut t = 0.0;
 
 	let mut gravgraph = Figure::new();
-	let mut kegraph = Figure::new();	
+	let mut kegraph = Figure::new();
 
 	println!("{}", 10.0*9.8*10.0);
 	loop {
@@ -54,9 +58,9 @@ fn main() {
 			println!("{}", 0.5*objs[1].mass*mag(&objs[1].vel).powi(2));
 			break;
 		}
-		t += stepsize;
-		grav_sim_step(&mut objs, stepsize);
-		if(t % printsize < stepsize){
+		t += STEPSIZE;
+		gravity::Gravity::sim_step_dbg(&mut objs, STEPSIZE, false);
+		if t % PRINTSIZE < STEPSIZE {
 			t_hist.push(t);
 			
 			let gpe : f64 = -1.0 * G * objs[0].mass * objs[1].mass *1.0/mag(&vminus(&objs[0].pos, &objs[1].pos));
@@ -76,18 +80,18 @@ fn main() {
 				.set_y_range(Fix(0.0), Fix(10.0*9.8*10.0))
 				.lines(t_hist.iter(), ke_hist.iter(), &[]);
 			kegraph.show();
-		}	
+		}
 	}
 }
 
-fn E_total(p : &Particle, objs : &Vec<Particle>) -> f64 {
+fn e_total(p : &Particle, objs : &Vec<Particle>) -> f64 {
 	gpe_total(p, objs) + p.ke() 
 }
 
 fn gpe_total(p : &Particle, objs : &Vec<Particle>) -> f64 {
 	let gravpe : f64 = objs.iter()
 		.filter(|a| *a as *const Particle !=  p as *const Particle)
-		.map(|a| gravpe(&a, &p))
+		.map(|a| Gravity::gravpe(&a, &p))
 		.sum();
 	gravpe
 }
