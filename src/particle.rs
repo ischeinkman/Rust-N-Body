@@ -8,6 +8,7 @@ pub struct Particle<'a> {
 	pub vel : Vec<f64>,
 	pub acc : Vec<f64>,
 	pub mass : f64,
+	pub charge : f64,
 	pub name : Cow<'a, str>,
 }
 
@@ -47,10 +48,11 @@ impl <'a> Particle<'a> {
 		let acc = vec![0.0,0.0,0.0];
 		Particle {
 			name : Cow::Owned(name.to_string()),
-			mass : mass,
-			pos : pos,
-			vel : vel,
-			acc : acc,
+			mass,
+			pos,
+			vel,
+			acc,
+			charge : 0
 		}
 	}	
 }
