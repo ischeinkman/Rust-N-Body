@@ -3,17 +3,17 @@ use math::*;
 use std::fmt::{Display, Formatter, Result};
 
 pub struct Particle {
-	pub pos : Vec<f64>,
-	pub vel : Vec<f64>,
-	pub acc : Vec<f64>,
+	pub pos : RectPhysVect,
+	pub vel : RectPhysVect,
+	pub acc : RectPhysVect,
 	pub mass : f64,
 	pub charge : f64,
 	pub name : String
 }
 
-pub fn center_of_mass(objs : &Vec<Particle>) -> Vec<f64> {
+pub fn center_of_mass(objs : &Vec<Particle>) -> RectPhysVect {
 	let mut mass = 0.0;
-	let mut weightpos = vec![0.0; objs[0].pos.len()];
+	let mut weightpos = RectPhysVect { x : 0.0, y : 0.0, z : 0.0};
 	for obj in objs {
 		weightpos = weightpos.plus(&obj.pos.scale(&obj.mass));
 		mass += obj.mass;
@@ -22,7 +22,7 @@ pub fn center_of_mass(objs : &Vec<Particle>) -> Vec<f64> {
 }
 
 impl Particle {
-	pub fn apply_force(&mut self, f : &Vec<f64>) {
+	pub fn apply_force(&mut self, f : &RectPhysVect) {
 		self.acc = self.acc.plus(&f.scale(&(1.0/self.mass)));
 	}
 	
@@ -42,15 +42,12 @@ impl Particle {
 	}
 	
 	pub fn at_rest(name : &str, mass : f64, pos : Vec<f64>) -> Particle {
-		
-		let vel = vec![0.0,0.0,0.0];
-		let acc = vec![0.0,0.0,0.0];
 		Particle {
 			name : name.to_owned(),
 			mass,
-			pos,
-			vel,
-			acc,
+			pos : RectPhysVect::from_vect(&pos),
+			vel : RectPhysVect {x : 0.0, y : 0.0, z : 0.0},
+			acc : RectPhysVect {x : 0.0, y : 0.0, z : 0.0},
 			charge : 0.0
 		}
 	}	
@@ -58,6 +55,6 @@ impl Particle {
 
 impl Display for Particle {
 	fn fmt(&self, f: &mut Formatter) -> Result {
-		write!(f, "Particle {}:\n Pos: {},\n Vel: {},\n Acc: {},\n Mass: {}\n\n", self.name, vprint(&self.pos), vprint(&self.vel), vprint(&self.acc), self.mass)	
+		write!(f, "Particle {}:\n Pos: {},\n Vel: {},\n Acc: {},\n Mass: {}\n\n", self.name, self.pos.to_string(), self.vel.to_string(), self.acc.to_string(), self.mass)
 	}
 }

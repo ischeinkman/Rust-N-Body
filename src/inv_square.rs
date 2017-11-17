@@ -13,7 +13,7 @@ pub trait InvSquare {
             p1.pos.minus(&p2.pos).mag().powi(2)
     }
 
-    fn force_vec(a : &Particle, b : &Particle) -> Vec<f64> {
+    fn force_vec(a : &Particle, b : &Particle) -> RectPhysVect {
         let mag = Self::force_mag(&a, &b);
         let dir = a.pos.minus(&b.pos).unit().scale(&-1.0);
         dir.scale(&mag)
@@ -34,7 +34,7 @@ pub trait InvSquare {
                 obi.apply_force(&gf);
                 obb.apply_force(&gf.scale(&-1.0));
                 if debug {
-                    println!("Force: {}\nP1: {}\nP2: {}\n\n", vprint(&gf), &obi, &obb);
+                    println!("Force: {}\nP1: {}\nP2: {}\n\n", gf.to_string(), &obi, &obb);
                 }
             }
         }

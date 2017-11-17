@@ -27,7 +27,7 @@ fn main() {
 	
 	let mut objs = vec![Particle::at_rest("earth", ME, vec![0.0,0.0,0.0])];
 	let range = Range::new(10.0, 100.0);
-	let mut rng = rand::thread_rng();
+	let rng = rand::thread_rng();
 	
 	let mut t_hist = Vec::new();
 	let mut gpe_hist = Vec::new();
@@ -64,7 +64,7 @@ fn main() {
 			t_hist.push(t);
 			
 			let gpe : f64 = -1.0 * G * objs[0].mass * objs[1].mass *1.0/ objs[0].pos.minus(&objs[1].pos).mag();
-			gpe_hist.push(objs[1].mass * 9.82 * (objs[1].pos[0] - RE));
+			gpe_hist.push(objs[1].mass * 9.82 * (objs[1].pos.x - RE));
 			gravgraph.clear_axes();
 			gravgraph.axes2d()
 				.set_x_range(Fix(0.0), Fix(t))
